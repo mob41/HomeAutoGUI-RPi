@@ -79,10 +79,7 @@ public class NotifyServlet extends HttpServlet {
 			switch (action){
 			case "redirect":
 				if (!SessionAuth.sesthread.isSessionAvailable(sessionkey)){
-					json.put("response", "Invaild session");
-					json.put("session", false);
-					json.put("status", -3);
-					response.getWriter().println(json);
+					response.getWriter().println("<h1>Invaild Session</h1>");
 					return;
 				}
 				String reredirecturl = Conf.homedash_url + ":" + Conf.api_port + "/api/notify?sessionkey=" + sessionkey;
@@ -257,16 +254,6 @@ public class NotifyServlet extends HttpServlet {
 			default:	
 			case "register":
 				response.setStatus(204);
-				if (code.equals(null)){	
-					if (error.equals(null)){
-						response.setStatus(400);
-						return;
-					}
-					else
-					{
-						response.sendRedirect(Conf.homedash_url);
-					}
-				}
 				try {
 					if (!SessionAuth.sesthread.isSessionAvailable(sessionkey)){
 						response.setStatus(401);
