@@ -78,9 +78,8 @@ public class HKOweather {
 		{
 			ite.next();
 		}
-		int temp = 0;
 		String text = ite.next().text();
-		return temp;
+		return Integer.parseInt(text.replaceAll("\\D+",""));
 	}
 
 	public static List<SyndEntryImpl> getRSSEntries(){
