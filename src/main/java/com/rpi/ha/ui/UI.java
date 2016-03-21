@@ -212,6 +212,18 @@ public class UI {
 		}
 		
 	};
+
+	private JSlider screentimeout;
+
+	private JCheckBox chckbx24Hour;
+
+	private JCheckBox chckbxEnLogToTerm;
+
+	private JCheckBox chckbxEnLogToFile;
+
+	private JCheckBox chckbxNoUndecorated;
+
+	private JCheckBox chckbxNoFullscreen;
 	
 	private void changeToAddNewScenePanel(){
 		fldSceneName.setText("");
@@ -484,7 +496,7 @@ public class UI {
 		chckbxBlankScreensaverEnabled.setFont(new Font("Dialog", Font.BOLD, 18));
 		chckbxBlankScreensaverEnabled.setSelected(Conf.scrsaver);
 		
-		JSlider screentimeout = new JSlider();
+		screentimeout = new JSlider();
 		screentimeout.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -571,7 +583,7 @@ public class UI {
 		JPanel clocksetpanel = new JPanel();
 		settingsTab.addTab("Clock", null, clocksetpanel, null);
 		
-		JCheckBox chckbx24Hour = new JCheckBox("24-Hour Clock");
+		chckbx24Hour = new JCheckBox("24-Hour Clock");
 		chckbx24Hour.setSelected(Conf.hour24);
 		chckbx24Hour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -600,7 +612,7 @@ public class UI {
 		JPanel loggingsetpanel = new JPanel();
 		settingsTab.addTab("Logging", null, loggingsetpanel, null);
 		
-		JCheckBox chckbxEnLogToTerm = new JCheckBox("Enable Logging to terminal");
+		chckbxEnLogToTerm = new JCheckBox("Enable Logging to terminal");
 		chckbxEnLogToTerm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Conf.logging = chckbxEnLogToTerm.isSelected();
@@ -617,7 +629,7 @@ public class UI {
 		chckbxEnLogToTerm.setSelected(Conf.logging);
 		chckbxEnLogToTerm.setFont(new Font("Dialog", Font.BOLD, 18));
 		
-		JCheckBox chckbxEnLogToFile = new JCheckBox("Enable Logging to File");
+		chckbxEnLogToFile = new JCheckBox("Enable Logging to File");
 		chckbxEnLogToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Conf.loggingToFile = chckbxEnLogToFile.isSelected();
@@ -650,7 +662,7 @@ public class UI {
 		JPanel panel = new JPanel();
 		settingsTab.addTab("Dev Tools", null, panel, null);
 		
-		JCheckBox chckbxNoUndecorated = new JCheckBox("No Undecorated (Requires Restart)");
+		chckbxNoUndecorated = new JCheckBox("No Undecorated (Requires Restart)");
 		chckbxNoUndecorated.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				undecorated = !chckbxNoUndecorated.isSelected();
@@ -664,7 +676,7 @@ public class UI {
 		chckbxNoUndecorated.setFont(new Font("Dialog", Font.PLAIN, 22));
 		chckbxNoUndecorated.setSelected(!undecorated);
 		
-		JCheckBox chckbxNoFullscreen = new JCheckBox("No Fullscreen");
+		chckbxNoFullscreen = new JCheckBox("No Fullscreen");
 		chckbxNoFullscreen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				extendedState = chckbxNoFullscreen.isSelected() ? JFrame.NORMAL : JFrame.MAXIMIZED_BOTH;

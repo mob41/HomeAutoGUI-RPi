@@ -33,6 +33,8 @@ public class EntertainMenu {
 	private JFrame frame;
 	private JTable table;
 
+	private JButton btnStart;
+
 	public static void start() {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -107,7 +109,7 @@ public class EntertainMenu {
 		splitPane_1.setResizeWeight(0.5);
 		splitPane.setRightComponent(splitPane_1);
 		
-		JButton btnStart = new JButton("Start");
+		btnStart = new JButton("Start");
 		btnStart.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnStart.setText("Running...");

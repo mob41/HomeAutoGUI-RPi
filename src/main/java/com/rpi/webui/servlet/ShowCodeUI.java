@@ -45,7 +45,7 @@ public class ShowCodeUI {
 	/**
 	 * Launch the application.
 	 */
-	protected static void start(String code) {
+	protected static void start(final String code) {
 		isRunning = true;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
