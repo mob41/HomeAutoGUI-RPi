@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
-import com.rpi.ha.ui.UI;
-
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 public class SceneSave {
 	
@@ -597,7 +595,7 @@ public class SceneSave {
     	Random rand = new Random();
     	byte[] key = new byte[16];
     	rand.nextBytes(key);
-    	return new BASE64Encoder().encode(key);
+    	return Base64.encodeBase64String(key);
     }
 
 }

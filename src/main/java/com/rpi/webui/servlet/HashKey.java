@@ -3,13 +3,14 @@ package com.rpi.webui.servlet;
 import java.security.AlgorithmParameters;
 import java.security.Key;
 import java.security.spec.KeySpec;
-import java.util.Base64;
 import java.util.Random;
 
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 
 import com.rpi.ha.Conf;
 
@@ -42,26 +43,26 @@ public class HashKey {
     	Random rand = new Random();
     	byte[] key = new byte[16];
     	rand.nextBytes(key);
-    	return new BASE64Encoder().encode(key);
+    	return Base64.encodeBase64String(key);
     }
     
     protected static String getRandomSalt(){
     	Random rand = new Random();
     	byte[] key = new byte[16];
     	rand.nextBytes(key);
-    	return new BASE64Encoder().encode(key);
+    	return Base64.encodeBase64String(key);
     }
     
     protected static String getRandom(int amount){
     	Random rand = new Random();
     	byte[] key = new byte[amount];
     	rand.nextBytes(key);
-    	return new BASE64Encoder().encode(key);
+    	return Base64.encodeBase64String(key);
     }
     
     
     protected static byte[] decode(String buffer) throws Exception {
-    	return new BASE64Decoder().decodeBuffer(buffer);
+    	return Base64.decodeBase64(buffer);
     }
     
     protected static String encrypt(String Data, String salt) throws Exception {
@@ -70,7 +71,7 @@ public class HashKey {
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.ENCRYPT_MODE, key);
         byte[] encVal = c.doFinal(Data.getBytes());
-        String encryptedValue = new BASE64Encoder().encode(encVal);
+        String encryptedValue = Base64.encodeBase64String(encVal);
         return encryptedValue;
     }
 
@@ -79,7 +80,7 @@ public class HashKey {
         Key key = generateKey();
         Cipher c = Cipher.getInstance(ALGO);
         c.init(Cipher.DECRYPT_MODE, key);
-        byte[] decordedValue = new BASE64Decoder().decodeBuffer(encryptedData);
+        byte[] decordedValue = Base64.decodeBase64(encryptedData);
         byte[] decValue = c.doFinal(decordedValue);
         String decryptedValue = new String(decValue);
         return decryptedValue;
