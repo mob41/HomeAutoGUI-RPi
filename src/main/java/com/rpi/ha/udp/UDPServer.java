@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mob41.pushbullet.api.PBServer;
 
+import com.rpi.ha.ann.AnnounceMem;
 import com.rpi.ha.ui.UI;
 
 public class UDPServer implements Runnable {
@@ -71,8 +72,21 @@ public class UDPServer implements Runnable {
 			    	case "bellevent":
 			    		logger.info("Reported Bell Event from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + ")");
 			    		logger.info("Pushing note to all pushbullet users...");
-			    		PBServer.pushToAllUsers("Door bell is rang!", "Go and see who's there!");
-			    		logger.info("Pushed!");
+			    		Thread pushThread = new Thread(new Runnable(){
+			    			public void run(){
+			    				try {
+									PBServer.pushToAllUsers("Door bell is rang!", "Go and see who's there!");
+						    		logger.info("Pushed!");
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+			    			}
+			    		});
+			    		pushThread.setName("HA_UDPServer-Pushbullet");
+			    		pushThread.start();
+			    		if (!AnnounceMem.isAnnouncesWithTypeExist("bellevent")){
+			    			AnnounceMem.addAnnounce("bellevent", "bellevent", "Door bell is rang!", "Go and see who's there!", 1, 5000);
+			    		}
 			    		break;
 			    	default:
 			    		logger.info("Unknown operation from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + "): " + msg);

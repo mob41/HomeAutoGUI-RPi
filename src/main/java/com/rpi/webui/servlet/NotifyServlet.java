@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
@@ -38,9 +39,10 @@ public class NotifyServlet extends HttpServlet {
 			String action = request.getParameter("state");
 			String code = request.getParameter("code");
 			String error = request.getParameter("error");
-			String redirecturl = request.getParameter("redirect");
-			String sessionkey = request.getParameter("sessionkey");
-			String authkey = request.getParameter("authkey");
+			//TODO Authkey is disabled here. Not implemented.
+			//String authkey = request.getParameter("authkey");
+			HttpSession session = request.getSession(false);
+			String sessionkey = (String) session.getAttribute("sessionkey");
 			try {
 				action.isEmpty();
 			} catch (NullPointerException e){
@@ -59,6 +61,7 @@ public class NotifyServlet extends HttpServlet {
 				response.flushBuffer();
 				response.sendRedirect(Conf.homedash_url);
 			}
+			/*
 			boolean auth = false;
 			try {
 				auth = HashKey.auth(authkey);
@@ -69,6 +72,8 @@ public class NotifyServlet extends HttpServlet {
 				response.getWriter().println(json);
 				return;
 			}
+			*/
+			boolean auth = true;
 			if (!auth){
 				response.setStatus(403);
 				json.put("status", -1);

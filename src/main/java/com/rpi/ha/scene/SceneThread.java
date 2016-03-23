@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.rpi.ha.Conf;
+import com.rpi.ha.ann.AnnounceMem;
 import com.rpi.ha.remo.BLRemote;
 import com.rpi.ha.remo.RMBridgeAPI;
 import com.rpi.ha.ui.BlankScreensaver;
@@ -103,33 +104,37 @@ public class SceneThread implements Runnable{
 				scenesdata = SceneSave.getScene(triggersdata[1]);
 				actionsdata = SceneSave.getAllActions(scenesdata[1]);
 				switch (triggersdata[0]){
+				case "bellevent":
+					if (AnnounceMem.isAnnouncesWithTypeExist("bellevent")){
+						if (scenesdata[2].equals("false")){
+							scenesdata[2] = "true";
+							SceneSave.setSceneNewData(scenesdata[1], scenesdata);
+							doAction(actionsdata, scenesdata);
+						} else {
+							if (!scenesdata[2].equals("false")){
+								scenesdata[2] = "false";
+								SceneSave.setSceneNewData(scenesdata[1], scenesdata);
+							}
+						}
+					}
+					break;
 				case "time-period":
 					if (isNowInTimePeriod(triggersdata[2])){
 						doAction(actionsdata, scenesdata);
 					}
 					break;
 				case "spec-time":
-					System.out.println("Checking spec time..");
 					if (isNowSpecTime(triggersdata[2])){
-						System.out.println("Is spec time!");
 						if (scenesdata[2].equals("false")){
-							System.out.println("Scene isn't running!" + scenesdata[2]);
 							scenesdata[2] = "true";
 							SceneSave.setSceneNewData(scenesdata[1], scenesdata);
 							doAction(actionsdata, scenesdata);
 						}
-						else
-						{
-							System.out.println("Scene is running. Cancelled.");
-						}
 					}
 					else {
-						System.out.println("Not spec time.");
 						if (!scenesdata[2].equals("false")){
-							System.out.println("Memory didn't show not spec time!" + scenesdata[2]);
 							scenesdata[2] = "false";
 							SceneSave.setSceneNewData(scenesdata[1], scenesdata);
-							System.out.println("Set! " + scenesdata[2]);
 						}
 					}
 					break;

@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mob41.pushbullet.api.PBServer;
 
+import com.rpi.ha.ann.AnnounceThread;
 import com.rpi.ha.err.ErrorHandler;
 import com.rpi.ha.jettysrv.JettyServ;
 import com.rpi.ha.remo.BLRemote;
@@ -87,8 +88,10 @@ public class Main {
 				}
 			}
 		}.start();
-		logger.trace("Starting UDP Communication server");
+		logger.trace("Starting UDP Communication server...");
 		UDPServer.startThread();
+		logger.trace("Starting Announcement control...");
+		AnnounceThread.startThread();
 		Thread.sleep(1000);
 		try {
 			Runtime.getRuntime().exec("feh --bg-center /home/pi/status/95-finalizing.fw.png");

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 
+import com.rpi.ha.ann.AnnounceMem;
 import com.rpi.ha.scene.SceneSave;
 import com.rpi.ha.ui.UI;
 import com.rpi.ha.widget.HKOweather;
@@ -58,22 +59,14 @@ public class InfoServlet extends HttpServlet {
 				data[i][j] = (String) UI.busArrTimeTable.getModel().getValueAt(i, j);
 			}
 		}
-		System.out.println(UI.busArrTimeTable.getModel().getRowCount());
+		
+		json.put("ann", AnnounceMem.getAllData());
+		json.put("anns", AnnounceMem.getAmountOfAnnouncement());
+		
 		json.put("busarrives", UI.busArrTimeTable.getModel().getRowCount());
 		json.put("stime", cal.getTime());
 		json.put("generated", cal.getTimeInMillis());
-
 		json.put("busarrive", data);
-
-		int scenes = SceneSave.getAllScenesAmount();
-		JSONObject scenejson = new JSONObject();
-		scenejson.put("total", scenes);
-		
-		for (i = 0; i < scenes; i++){
-			scenejson.put("data", SceneSave.getScene(i));
-		}
-		json.put("scenes", scenejson);
-		
 		json.put("temperature", HKOweather.getTemp(23));
 		json.put("weathericon", HKOweather.getWeatherImageURL());
 		logger.info("The device (" + request.getRemoteAddr() + ") is disconnecting");

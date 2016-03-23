@@ -24,7 +24,7 @@ public class SceneSave {
 	};
 
 	public static final String[] colident = {"Name", "During", "Trigger"};
-	public static final String[] deftriggers = {"time-period", "spec-time"};
+	public static final String[] deftriggers = {"time-period", "spec-time", "bellevent"};
 	public static final String[] defactions = {"stop-scrnsave", "sendbutton", "delay"};
 	
 	private static List<String[]> scenesdata = new ArrayList<String[]>(500);

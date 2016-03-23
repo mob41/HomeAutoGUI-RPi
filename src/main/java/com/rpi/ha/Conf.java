@@ -56,7 +56,7 @@ public class Conf {
 	public static String pushbullet_serversalt = "";
 	
 	//HomeDashboard URL (Do not add dash "/" to the back)
-	public static String homedash_url = "http://www.example.com";
+	public static String homedash_url = "http://127.0.0.1";
 	
 	//API Port
 	public static int api_port = 8080;
