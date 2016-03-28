@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.mob41.pushbullet.api.PBServer;
 
 import com.rpi.ha.ann.AnnounceMem;
+import com.rpi.ha.ann.bell.BellAlarmUI;
 import com.rpi.ha.ui.UI;
 
 public class UDPServer implements Runnable {
@@ -65,10 +66,16 @@ public class UDPServer implements Runnable {
 			    DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 			    
 			    while (!end){
+			    	float voltage;
+			    	int voltagepercentage;
 			    	dsocket.receive(packet);
 			    	String msg = new String(buffer, 0 , packet.getLength());
-			    	logger.info("Recevied UDP Packet from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + "): " + msg);
-			    	switch (msg){
+			    	logger.trace("Recevied UDP Packet from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + "): " + msg);
+			    	if (msg == null || msg == ""){
+			    		continue;
+			    	}
+			    	String msgNoNum = msg.replaceAll("[^A-Za-z]","");
+			    	switch (msgNoNum){
 			    	case "bellevent":
 			    		logger.info("Reported Bell Event from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + ")");
 			    		logger.info("Pushing note to all pushbullet users...");
@@ -87,9 +94,30 @@ public class UDPServer implements Runnable {
 			    		if (!AnnounceMem.isAnnouncesWithTypeExist("bellevent")){
 			    			AnnounceMem.addAnnounce("bellevent", "bellevent", "Door bell is rang!", "Go and see who's there!", 1, 5000);
 			    		}
+			    		if (!BellAlarmUI.running){
+			    			BellAlarmUI.start();
+			    		}
+			    		break;
+			    	case "batterylow":
+			    		voltage = Float.parseFloat(msg.replaceAll("[^0-9]", "")) / 100;
+			    		voltagepercentage = (int) (voltage / 4.5 * 100);
+			    		if (!AnnounceMem.isAnnouncesWithTypeExist("batterylow")){
+			    			logger.warn("Reported BATTERY LOW from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + ")");
+				    		logger.warn("Recharge / Change the batteries of the module now. Remaining voltage: " + voltage + "v " + voltagepercentage + "%");
+			    			AnnounceMem.addAnnounce("batterylow", "batterylow", "BATTERY LOW: Bell Event Module", "Recharge / Change the batteries of the module now. "
+			    					+ "Remaining voltage: " + voltage + "v " + voltagepercentage + "%", 3, 300000);
+			    		} else {
+			    			logger.trace("Duplicate report. Ignoring...");
+			    		}
+			    		break;
+			    	case "battlevel":
+			    		voltage = Float.parseFloat(msg.replaceAll("[^0-9]", "")) / 100;
+			    		voltagepercentage = (int) (voltage / 4.5 * 100);
+			    		logger.info("Reported Battery Level from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + ")");
+			    		logger.info("The battery is running on " + voltage + "v " + voltagepercentage + "%");
 			    		break;
 			    	default:
-			    		logger.info("Unknown operation from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + "): " + msg);
+			    		logger.info("Unknown operation from " + packet.getAddress().getHostName() + " (" + packet.getAddress().getHostAddress() + "): [" + msgNoNum + "]");
 			    	}
 			    	packet.setLength(buffer.length);
 			    }
