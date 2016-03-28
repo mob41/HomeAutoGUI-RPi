@@ -1,0 +1,14 @@
+#JSGF V1.0;
+
+grammar voiceCommand;
+
+public <controlSomething> = [<start>] (turn on | turn off) [the] (light | tv);
+public <queryTime> = [<start>] what is the time now;
+public <changeChannel> = [<start>] go to channel;
+public <homescene> = [<start>] [run | switch to] home scene;
+public <askname> = ([<start>] what is your name) | who are you;
+public <nocommand> = <start>;
+public <invaild1> = [<start>] (clean [the] toilet);
+public <invaild2> = [<start>] shut up;
+
+<start> = hey voice;
